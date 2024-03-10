@@ -1,0 +1,4 @@
+[environments.development]
+store = "simarjit-interview"
+password  = "shptka_b749aa939241c7a4fa5932b1539907ff"
+theme-editor-sync = true
