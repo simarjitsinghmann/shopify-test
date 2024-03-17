@@ -6,7 +6,7 @@ if (!customElements.get('product-form')) {
         super();
 
         this.form = this.querySelector('form');
-        this.form.querySelector('[name=id]').disabled = false;
+        if(this.form.querySelector('[name=id]'))  this.form.querySelector('[name=id]').disabled = false;
         this.form.addEventListener('submit', this.onSubmitHandler.bind(this));
         this.cart = document.querySelector('cart-notification') || document.querySelector('cart-drawer');
         this.submitButton = this.querySelector('[type="submit"]');
@@ -26,11 +26,13 @@ if (!customElements.get('product-form')) {
         this.submitButton.classList.add('loading');
         this.querySelector('.loading__spinner').classList.remove('hidden');
 
-        const config = fetchConfig('javascript');
+        let config = fetchConfig('javascript');
+
         config.headers['X-Requested-With'] = 'XMLHttpRequest';
         delete config.headers['Content-Type'];
 
         const formData = new FormData(this.form);
+
         if (this.cart) {
           formData.append(
             'sections',
@@ -39,8 +41,32 @@ if (!customElements.get('product-form')) {
           formData.append('sections_url', window.location.pathname);
           this.cart.setActiveElement(document.activeElement);
         }
-        config.body = formData;
-
+        if(this.form.querySelector('[name=id]')){
+          config.body = formData;
+        }
+        else{
+          config = fetchConfig('json');
+          let body = {
+            'items': [],
+            'section-id': this.dataset.sectionId
+          };
+          if (this.cart) {
+            body.sections = this.cart.getSectionsToRender().map((section) => section.id)
+            body.sections_url = window.location.pathname;
+            this.cart.setActiveElement(document.activeElement);
+          }
+          for (let [key, value] of formData.entries()) {
+            if (key.startsWith('variant-')) {
+              const variantId = key.split('-')[1];
+              body.items.push({
+                'id': variantId,
+                'quantity': parseInt(value)
+              });
+            }
+          }
+          config.body = JSON.stringify(body);
+        }
+      
         fetch(`${routes.cart_add_url}`, config)
           .then((response) => response.json())
           .then((response) => {
