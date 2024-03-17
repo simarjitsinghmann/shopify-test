@@ -1136,6 +1136,10 @@ class VariantSelects extends HTMLElement {
           `Sku-${this.dataset.originalSection ? this.dataset.originalSection : this.dataset.section}`
         );
         const skuDestination = document.getElementById(`Sku-${this.dataset.section}`);
+        const dimensionsDestination = document.getElementById(`variant-dimensions-${this.dataset.section}`);
+        const dimensionsSource = html.getElementById(
+          `variant-dimensions-${this.dataset.originalSection ? this.dataset.originalSection : this.dataset.section}`
+        );
         const inventorySource = html.getElementById(
           `Inventory-${this.dataset.originalSection ? this.dataset.originalSection : this.dataset.section}`
         );
@@ -1158,6 +1162,7 @@ class VariantSelects extends HTMLElement {
 
         if (source && destination) destination.innerHTML = source.innerHTML;
         if (inventorySource && inventoryDestination) inventoryDestination.innerHTML = inventorySource.innerHTML;
+        if (dimensionsSource && dimensionsDestination) dimensionsDestination.innerHTML = dimensionsSource.innerHTML;
         if (skuSource && skuDestination) {
           skuDestination.innerHTML = skuSource.innerHTML;
           skuDestination.classList.toggle('hidden', skuSource.classList.contains('hidden'));
