@@ -72,7 +72,7 @@
               <tr>
                 <td><span>{{ variant.sku | default : '--' }}</span></td>
                 <td><span>{{ variant.price | money }}</span>{% if variant.compare_at_price > variant.price %}<span><s>{{ variant.compare_at_price | money }}</s></span>{% endif %}</td>
-                <td><span><input type="number" name="variant-{{ variant.id }}" value="0"></span></td>
+                <td><span><input type="number" name="variant-{{ variant.id }}" value="0"{% if variant.available == false %} disabled{% endif %}></span></td>
               </tr>
             {% endfor %}
           </table>
@@ -96,12 +96,12 @@
             type="submit"
             name="add"
             class="product-form__submit button button--full-width {% if show_dynamic_checkout %}button--secondary{% else %}button--primary{% endif %}"
-            {% if product.selected_or_first_available_variant.available == false or quantity_rule_soldout %}
+            {% if product.available == false %}
               disabled
             {% endif %}
           >
             <span>
-              {%- if product.selected_or_first_available_variant.available == false or quantity_rule_soldout -%}
+              {%- if product.available == false -%}
                 {{ 'products.product.sold_out' | t }}
               {%- else -%}
                 {{ 'products.product.add_to_cart' | t }}
@@ -109,9 +109,6 @@
             </span>
             {%- render 'loading-spinner' -%}
           </button>
-          {%- if show_dynamic_checkout -%}
-            {{ form | payment_button }}
-          {%- endif -%}
         </div>
       {%- endform -%}
     </product-form>
