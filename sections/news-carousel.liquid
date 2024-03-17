@@ -1,0 +1,130 @@
+{%- liquid
+    assign featured_blocks = ''
+    assign regular_blocks = ''
+-%}
+{%- for block in section.blocks -%}
+    {%- if block.settings.title != blank or block.settings.description != blank -%}
+        {%- capture blockContent -%}
+            <div class="carousel-item carousel-{{ block.type }}" {{ block.shopify_attributes }}>
+                {% if block.settings.title != blank %}
+                    <h3>{{ block.settings.title }}</h3>
+                {% endif %}
+                {% if block.settings.description != blank %}
+                    <p>{{ block.settings.description }}</p>
+                {% endif %}
+            </div>
+        {%- endcapture -%}
+        {% liquid
+            if block.settings.featured
+                assign featured_blocks = featured_blocks | append: blockContent
+            else
+                assign regular_blocks = regular_blocks | append: blockContent
+            endif
+        %}
+    {%- endif -%}
+{%- endfor -%}
+{%- if featured_blocks != blank or regular_blocks != blank -%}
+<div class="news-carousel">
+  <div class="carousel">
+    {{- featured_blocks -}}
+    {{- regular_blocks -}}
+  </div>
+</div>
+{%- endif -%}
+<style>
+    .carousel-campaign h3{
+        color: red;
+    }
+    .carousel-new-product h3{
+        color: blue;
+    }
+    .carousel-news h3{
+        color: green;
+    }
+</style>
+{% schema %}
+{
+  "name": "News carousel",
+  "tag": "section",
+  "class": "section",
+  "disabled_on": {
+    "groups": [
+      "header",
+      "footer"
+    ]
+  },
+  "blocks": [
+    {
+        "type":"campaign",
+        "name": "Campaign",
+        "settings": [
+            {
+                "type":"text",
+                "id":"title",
+                "label":"Title"
+            },
+            {
+                "type":"textarea",
+                "id":"description",
+                "label":"Description"
+            },
+            {
+                "type":"checkbox",
+                "id":"featured",
+                "label":"Featured",
+                "default": false
+            }
+        ]
+    },
+    {
+        "type":"new-product",
+        "name": "New product",
+        "settings": [
+            {
+                "type":"text",
+                "id":"title",
+                "label":"Title"
+            },
+            {
+                "type":"textarea",
+                "id":"description",
+                "label":"Description"
+            },
+            {
+                "type":"checkbox",
+                "id":"featured",
+                "label":"Featured",
+                "default": false
+            }
+        ]
+    },
+    {
+        "type":"news",
+        "name": "News",
+        "settings": [
+            {
+                "type":"text",
+                "id":"title",
+                "label":"Title"
+            },
+            {
+                "type":"textarea",
+                "id":"description",
+                "label":"Description"
+            },
+            {
+                "type":"checkbox",
+                "id":"featured",
+                "label":"Featured",
+                "default": false
+            }
+        ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "News carousel"
+    }
+  ]
+}
+{% endschema %}
