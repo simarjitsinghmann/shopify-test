@@ -198,8 +198,12 @@
                 </span>
               </p>
             {%- endif -%}
-
-            {% render 'price', product: card_product, price_class: '', show_compare_at_price: true %}
+            {% liquid
+               if customer
+                render 'price', product: card_product, price_class: '', show_compare_at_price: true 
+                endif
+              %}
+            
             {%- if card_product.quantity_price_breaks_configured? -%}
               <div class="card__information-volume-pricing-note">
                 <span class="caption">{{ 'products.product.volume_pricing.note' | t }}</span>
@@ -370,10 +374,18 @@
               <span class="visually-hidden">{{ 'accessibility.vendor' | t }}</span>
               <div class="caption-with-letter-spacing light">{{ 'products.product.vendor' | t }}</div>
             {%- endif -%}
-            {% render 'price', show_compare_at_price: true %}
+            {% liquid
+                if customer
+                  render 'price', show_compare_at_price: true 
+                endif
+              %}
           </div>
         </div>
       </div>
     </div>
   </div>
 {%- endif -%}
+
+{% unless customer %}
+  <a class="button" href="{{ routes.account_login_url}}">Login to see wholesale prices</a>
+  {% endunless %}

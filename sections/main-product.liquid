@@ -101,6 +101,7 @@
                   </a>
                 </div>
               {%- when 'price' -%}
+                {% if customer %}
                 <div class="no-js-hidden" id="price-{{ section.id }}" role="status" {{ block.shopify_attributes }}>
                   {%- render 'price',
                     product: product,
@@ -129,6 +130,7 @@
                     {{ form | payment_terms }}
                   {%- endform -%}
                 </div>
+              {% endif %}
               {%- when 'inventory' -%}
                 <p
                   class="product__inventory no-js-hidden{% if block.settings.text_style == 'uppercase' %} caption-with-letter-spacing{% elsif block.settings.text_style == 'subtitle' %} subtitle{% endif %}{% if product.selected_or_first_available_variant.inventory_management != 'shopify' %} visibility-hidden{% endif %}"
@@ -243,6 +245,7 @@
                       >
                     </span>
                   </label>
+                  {% if customer %}
                   <div class="price-per-item__container">
                     <quantity-input class="quantity" data-url="{{ product.url }}" data-section="{{ section.id }}">
                       <button class="quantity__button no-js-hidden" name="minus" type="button">
@@ -429,6 +432,7 @@
                       {%- endif -%}
                     </volume-pricing>
                   {%- endif -%}
+                {% endif %}
                 </div>
               {%- when 'popup' -%}
                 <modal-opener
@@ -457,6 +461,7 @@
               {%- when 'variant_picker' -%}
                 {% render 'product-variant-picker', product: product, block: block, product_form_id: product_form_id %}
               {%- when 'buy_buttons' -%}
+                {% if customer %}
                 {%- render 'custom-buy-buttons',
                   block: block,
                   product: product,
@@ -464,6 +469,10 @@
                   section_id: section.id,
                   show_pickup_availability: true
                 -%}
+                {% else %}
+
+  <a class="button" href="{{ routes.account_login_url}}">Login to see wholesale prices</a>
+                {% endif %}
               {%- when 'rating' -%}
                 {%- if product.metafields.reviews.rating.value != blank -%}
                   <div class="rating-wrapper">
