@@ -27,13 +27,6 @@
           "settings": {
           }
         },
-        "variant_picker": {
-          "type": "variant_picker",
-          "settings": {
-            "picker_type": "button",
-            "swatch_shape": "circle"
-          }
-        },
         "buy_buttons": {
           "type": "buy_buttons",
           "settings": {
@@ -94,7 +87,6 @@
         "title",
         "caption",
         "price",
-        "variant_picker",
         "buy_buttons",
         "description",
         "collapsible-row-0",
